@@ -1,3 +1,5 @@
+import os
+
 def save_to_file(people, filename):
     with open(filename, "w") as file:
         file.write("Name ;Weight (kg) ;Height (cm) ;BMI\n")
@@ -56,10 +58,21 @@ while True:
 
     program_continue = input("Do you want to enter information for another user? (yes/no): ")
     if program_continue.lower() != 'yes':
-            print("\nUser Information:")
-            for user in user_list:
-                output = f"Name: {user['Name']}\nWeight: {user['Weight']} KG\nHeight: {user['Height']} Cm\nBMI: {user['BMI']:.2f}"
-                print(output)
-                save_to_file(user_list, "bmi.txt")
-            break    
+        print("\nUser Information:")
+        for user in user_list:
+            output = f"Name: {user['Name']}\nWeight: {user['Weight']} KG\nHeight: {user['Height']} Cm\nBMI: {user['BMI']:.2f}"
+            print(output) 
+        if os.path.exists("bmi.txt"):
+            create_new_file = input("A file named 'bmi.txt' already exists. Do you want to create a new file? (yes/no): ")
+            if create_new_file.lower() == 'yes':
+                file_counter = 1
+                while os.path.exists(f"bmi{file_counter}.txt"):
+                    file_counter += 1
+                save_to_file(user_list, f"bmi{file_counter}.txt")
+            else:
+                print("Data was not saved to a file.")
+        else:
+            save_to_file(user_list, "bmi.txt")
+
+        break
 
