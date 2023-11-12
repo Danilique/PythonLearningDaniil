@@ -6,7 +6,6 @@ def save_to_file(people, filename):
         for person in people:
             file.write(f"{person['Name']} :{person['Weight']} :{person['Height']} :{person['BMI']:.2f}\n")
 
-
 def get_bmi_score(weight, height):
     height_meters = height / 100
     bmi_score = weight / (height_meters ** 2)
@@ -19,6 +18,7 @@ def get_valid_input(prompt, min_length, max_length):
             return user_input
         else:
             print(f"Please retype, Min length is {min_length} and maximum is {max_length} LETTERS ONLY")
+
 def get_valid_height_input():
     while True:
         try:
@@ -40,12 +40,13 @@ def get_valid_weight_input():
                 print("Please enter a valid weight between 20 and 400 kilograms.")
         except ValueError:
             print("Please enter a valid number for your weight.")
+
 user_list = []
-            
+
 while True:
     user_info = {}
     name = get_valid_input("Enter your name (4-30 characters): ", 4, 30)
-    weight =get_valid_weight_input()
+    weight = get_valid_weight_input()
     height = get_valid_height_input()
     bmi = get_bmi_score(weight, height)
 
@@ -61,18 +62,18 @@ while True:
         print("\nUser Information:")
         for user in user_list:
             output = f"Name: {user['Name']}\nWeight: {user['Weight']} KG\nHeight: {user['Height']} Cm\nBMI: {user['BMI']:.2f}"
-            print(output) 
+            print(output)
+
+        # Check if the file already exists
         if os.path.exists("bmi.txt"):
             create_new_file = input("A file named 'bmi.txt' already exists. Do you want to create a new file? (yes/no): ")
             if create_new_file.lower() == 'yes':
-                file_counter = 1
-                while os.path.exists(f"bmi{file_counter}.txt"):
-                    file_counter += 1
-                save_to_file(user_list, f"bmi{file_counter}.txt")
+                save_to_file(user_list, "bmi.txt")
             else:
-                print("Data was not saved to a file.")
+                with open("bmi.txt", "a") as file:
+                    for person in user_list:
+                        file.write(f"{person['Name']} :{person['Weight']} :{person['Height']} :{person['BMI']:.2f}\n")
         else:
             save_to_file(user_list, "bmi.txt")
 
         break
-
